@@ -11,13 +11,14 @@ from rl.memory import SequentialMemory
 
 
 ENV_NAME = 'CartPole-v0'
-
+learning_rate = 0.001
 
 # Get the environment and extract the number of actions.
 env = gym.make(ENV_NAME)
 np.random.seed(123)
 env.seed(123)
 nb_actions = env.action_space.n
+print(nb_actions)
 
 # Next, we build a very simple model.
 model = Sequential()
@@ -38,7 +39,7 @@ memory = SequentialMemory(limit=50000, window_length=1)
 policy = BoltzmannQPolicy()
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,
                target_model_update=1e-2, policy=policy)
-dqn.compile(Adam(lr=1e-3), metrics=['mae'])
+dqn.compile(Adam(lr=learning_rate))
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
